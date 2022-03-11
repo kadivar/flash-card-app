@@ -63,7 +63,7 @@ jobs:
 
       - name: Prepare the application
         run: |
-          php -r "file_exists('.env') || copy('.env.example', '.env');"
+          php -r "file_exists('.env') || copy('.github.ci.env', '.env');"
           php artisan key:generate
 
       - name: Clear Config
@@ -72,11 +72,17 @@ jobs:
       - name: Run Migration
         run: php artisan migrate -v
         env:
+          REDIS_PORT: 6379
           DB_PORT: 3306
-          REDIS_PORT: ${{ job.services.redis.ports['6379'] }}
+          DB_DATABASE: test-db
+          DB_USERNAME: root
+          DB_PASSWORD: ${{ secrets.MYSQL_ROOT_PASSWORD }}
 
       - name: Test with phpunit
         run: vendor/bin/phpunit --coverage-text
         env:
-          DB_PORT: 3306
           REDIS_PORT: 6379
+          DB_PORT: 3306
+          DB_DATABASE: test-db
+          DB_USERNAME: root
+          DB_PASSWORD: ${{ secrets.MYSQL_ROOT_PASSWORD }}

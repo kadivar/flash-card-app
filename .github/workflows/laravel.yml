@@ -78,6 +78,15 @@ jobs:
           DB_USERNAME: test-db
           DB_PASSWORD: ${{ secrets.MYSQL_PASSWORD }}
 
+      - name: Run Seeders
+        run: php artisan db:seed
+        env:
+          REDIS_PORT: 6379
+          DB_PORT: 3306
+          DB_DATABASE: test-db
+          DB_USERNAME: test-db
+          DB_PASSWORD: ${{ secrets.MYSQL_PASSWORD }}
+
       - name: Test with phpunit
         run: vendor/bin/phpunit --coverage-text
         env:

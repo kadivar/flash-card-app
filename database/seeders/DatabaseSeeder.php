@@ -2,8 +2,10 @@
 
 namespace Database\Seeders;
 
+use Database\Factories\AdminFactory;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use App\Models\User;
 
 class DatabaseSeeder extends Seeder
 {
@@ -14,6 +16,9 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        // \App\Models\User::factory(10)->create();
+        $admin_exist = User::where('name', 'Super Admin')->exists();
+        if (!$admin_exist) {
+            User::admin_factory()->count(1)->create();
+        }
     }
 }

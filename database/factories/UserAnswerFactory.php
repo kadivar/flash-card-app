@@ -27,6 +27,22 @@ class UserAnswerFactory extends Factory
      */
     public function definition()
     {
+
+        $status = $this->faker->randomElement([0, 1]);
+        switch ($status){
+            case 0:
+                $question = $this->faker->paragraph;
+                $answer = $this->faker->paragraph;
+                break;
+            case 1:
+                $question = $this->faker->paragraph;
+                $answer = $question;
+                break;
+            default:
+                $question = $this->faker->paragraph;
+                $answer = $this->faker->paragraph;
+        }
+
         return [
             'user_id' => function () {
                 $default_admin = User::where('id', 1)->exists();
@@ -38,8 +54,8 @@ class UserAnswerFactory extends Factory
             'card_id' => function () {
                 return Card::factory()->create()->id;
             },
-            'answer' => $this->faker->paragraph,
-            'status' => $this->faker->randomElement([0, 1]),
+            'answer' => $answer,
+            'status' => $status,
             'description' => $this->faker->paragraph
         ];
     }

@@ -59,7 +59,10 @@ jobs:
           coverage: xdebug
 
       - name: Start mysql service
-        run: sudo systemctl start mysql
+        run: |
+          sudo chmod -R u+rwx /etc/mysql/
+          sudo chown -R mysql.mysql /etc/mysql/
+          sudo systemctl start mysql
 
       - name: Install Composer dependencies
         run: composer install --no-progress --prefer-dist --optimize-autoloader

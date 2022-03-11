@@ -24,7 +24,7 @@ return new class extends Migration
                 ->references('id')
                 ->on('cards');
             $table->longText('answer');
-            $table->string('status')->default('not_answered');
+            $table->integer('status');
             $table->longText('description')->nullable();
             $table->timestamps();
         });

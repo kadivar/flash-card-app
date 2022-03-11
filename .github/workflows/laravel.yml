@@ -24,7 +24,7 @@ jobs:
           MYSQL_ROOT_PASSWORD: ${{ secrets.MYSQL_ROOT_PASSWORD }}
           MYSQL_DATABASE: test-db
         ports:
-          - 33306:3306
+          - 3306:3306
         options: >-
           --health-cmd="mysqladmin ping"
           --health-interval=10s
@@ -34,7 +34,7 @@ jobs:
       redis:
         image: redis
         ports:
-          - 66379:6379
+          - 6379:6379
         options: >-
           --health-cmd="redis-cli ping"
           --health-interval=10s
@@ -72,8 +72,8 @@ jobs:
       - name: Run Migration
         run: php artisan migrate -v
         env:
-          REDIS_PORT: 66379
-          DB_PORT: 33306
+          REDIS_PORT: 6379
+          DB_PORT: 3306
           DB_DATABASE: test-db
           DB_USERNAME: root
           DB_PASSWORD: ${{ secrets.MYSQL_ROOT_PASSWORD }}
@@ -81,8 +81,8 @@ jobs:
       - name: Test with phpunit
         run: vendor/bin/phpunit --coverage-text
         env:
-          REDIS_PORT: 66379
-          DB_PORT: 33306
+          REDIS_PORT: 6379
+          DB_PORT: 3306
           DB_DATABASE: test-db
           DB_USERNAME: root
           DB_PASSWORD: ${{ secrets.MYSQL_ROOT_PASSWORD }}

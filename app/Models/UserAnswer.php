@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\User;
+use Database\Factories\UserAnswerFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -45,6 +46,14 @@ class UserAnswer extends Model
      * @var array
      */
     protected $casts = [];
+
+    /**
+     * @return UserAnswerFactory
+     */
+    protected static function factory(): UserAnswerFactory
+    {
+        return UserAnswerFactory::new();
+    }
 
     /**
      * return parent user

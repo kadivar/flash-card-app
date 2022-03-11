@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Database\Factories\CardFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -43,6 +44,14 @@ class Card extends Model
      * @var array
      */
     protected $casts = [];
+
+    /**
+     * @return CardFactory
+     */
+    protected static function factory(): CardFactory
+    {
+        return CardFactory::new();
+    }
 
     /**
      * return parent box

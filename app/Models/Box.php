@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Database\Factories\BoxFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -40,6 +41,14 @@ class Box extends Model
      * @var array
      */
     protected $casts = [];
+
+    /**
+     * @return BoxFactory
+     */
+    protected static function factory(): BoxFactory
+    {
+        return BoxFactory::new();
+    }
 
     /**
      * return cards

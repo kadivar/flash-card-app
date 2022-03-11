@@ -1,8 +1,8 @@
 <p align="center"><a href="https://www.studeersnel.nl/nl" target="_blank"><img src="https://d20ohkaloyme4g.cloudfront.net/img/studeersnel_logo.png" width="200"></a></p>
 
 <p align="center">
-<a href="#"><img src="https://github.com/kadivar/flash-card-app/actions/workflows/laravel.yml/badge.svg" alt="Build Status"></a>
-<a href="#"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
+<a href="https://github.com/kadivar/flash-card-app/actions/workflows/laravel.yml"><img src="https://github.com/kadivar/flash-card-app/actions/workflows/laravel.yml/badge.svg" alt="Build Status"></a>
+<a href="https://github.com/kadivar/flash-card-app/blob/main/LICENSE.md"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
 <a href="https://twitter.com/mr_kadivar" title="setup-php twitter"><img alt="setup-php twitter" src="https://img.shields.io/badge/twitter-follow-1DA1F2?logo=twitter&logoColor=1DA1F2&labelColor=555555"></a>
 </p>
 

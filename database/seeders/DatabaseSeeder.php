@@ -16,9 +16,7 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        $admin_exist = User::where('name', 'Super Admin')->exists();
-        if (!$admin_exist) {
-            User::admin_factory()->count(1)->create();
-        }
+        $this->call(AdminUserSeeder::class);
+        $this->call(BoxSeeder::class);
     }
 }

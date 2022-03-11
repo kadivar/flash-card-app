@@ -1,7 +1,7 @@
 name: Testing Laravel with MySQL
 on:
   push:
-    branches: [ master, feature/** ]
+    branches: [ main, feature/** ]
   pull_request:
     branches: [ master ]
 jobs:

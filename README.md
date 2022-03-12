@@ -13,7 +13,7 @@ repetition tool for memorising questions and their respective answers.
 It includes following subcommands:
 
 ### Data Schema
-![alt text](https://github.com/kadivar/flash-card-app/blob/main/data-schema.png?raw=true)
+![Data Schema](https://github.com/kadivar/flash-card-app/blob/main/data-schema.png?raw=true)
 
 ### How to use
 For Initial run and get commands list use: `php artisan flashcard:interactive`

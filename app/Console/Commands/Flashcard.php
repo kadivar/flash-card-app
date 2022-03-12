@@ -6,7 +6,6 @@ use App\Models\Card;
 use App\Models\User;
 use App\Models\UserAnswer;
 use Illuminate\Console\Command;
-use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
 class Flashcard extends Command
 {
@@ -52,6 +51,9 @@ class Flashcard extends Command
                 break;
             case 5:
                 $this->reset();
+                break;
+            case 6:
+                $this->line('<bg=blue;fg=white>Good luck!</>');
                 break;
         }
 

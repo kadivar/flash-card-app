@@ -2,11 +2,13 @@
 
 namespace App\Console\Commands;
 
+use App\Models\Box;
 use App\Models\Card;
 use App\Models\User;
 use App\Models\UserAnswer;
 use Illuminate\Console\Command;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\App;
 
 class Flashcard extends Command
 {
@@ -31,6 +33,7 @@ class Flashcard extends Command
      */
     public function handle(): int
     {
+        $this->check_setup();
         $this->print_help();
         $picked_operation = $this->prompt_operation_id();
         switch ($picked_operation) {
@@ -57,8 +60,24 @@ class Flashcard extends Command
                 $this->line('<bg=blue;fg=white>Good luck!</>');
                 break;
         }
-
         return 0;
+    }
+
+    /**
+     * Check app initial setup
+     *
+     * @return void
+     */
+    public function check_setup()
+    {
+        $is_running_test = App::runningUnitTests();
+        $is_in_console = App::runningInConsole();
+        $user = User::get()->first();
+        $box = Box::get()->first();
+        if(!$is_running_test && (!$user || !$box)){
+            $this->line('<fg=red>Please complete your setup with running seeders.</>');
+            Exit;
+        }
     }
 
     /**
@@ -98,7 +117,7 @@ class Flashcard extends Command
      */
     public function print_practice_history()
     {
-        $user = User::find(1);
+        $user = User::get()->first();
         $cards = Card::with(['last_answer' => function($query) use ($user){
             $query->where('user_id', $user->id);
         }])->get()->toArray();
@@ -106,6 +125,7 @@ class Flashcard extends Command
         $correct = 0;
         $incorrect = 0;
         $not_answered = 0;
+        $progress = 0;
         $result = [];
         foreach ($cards as $card){
             if(!is_array($card['last_answer'])){
@@ -133,10 +153,13 @@ class Flashcard extends Command
             ]);
             $total++;
         }
+        if($total > 0){
+            $progress = ($correct/$total)*100;
+        }
         array_push($result, [
             ' ' => ' ',
             'question' => '<fg=green> % of completion</>',
-            'status' => '<fg=green> ' . round(($correct/$total)*100) . '% </>'
+            'status' => '<fg=green> ' . round($progress) . '% </>'
         ]);
         $this->table(
             ['ID', 'Question', 'Status'],
@@ -151,7 +174,7 @@ class Flashcard extends Command
      */
     public function print_practice_stats()
     {
-        $user = User::find(1);
+        $user = User::get()->first();
         $cards = Card::with(['last_answer' => function($query) use ($user){
             $query->where('user_id', $user->id);
         }])->get()->toArray();
@@ -274,8 +297,9 @@ class Flashcard extends Command
     public function create_card(string $question, string $answer)
     {
         try{
+            $box = Box::get()->first();
             $card_id = Card::create([
-                'box_id' => 1,
+                'box_id' => $box->id,
                 'question' => $question,
                 'answer' => $answer
             ])?->id;
@@ -294,7 +318,7 @@ class Flashcard extends Command
      */
     public function practice($card_id)
     {
-        $user = User::find(1);
+        $user = User::get()->first();
         $card = Card::with('last_answer', 'answers')->where([
             'id' => $card_id
         ])->first();
@@ -348,7 +372,7 @@ class Flashcard extends Command
     public function reset()
     {
         try{
-            $user = User::find(1);
+            $user = User::get()->first();
             UserAnswer::where([
                 'user_id' =>$user->id
             ])->forceDelete();

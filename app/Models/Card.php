@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Card extends Model
 {
@@ -71,5 +72,15 @@ class Card extends Model
     public function answers(): HasMany
     {
         return $this->hasMany(UserAnswer::class, 'card_id', 'id');
+    }
+
+    /**
+     * return last answer
+     *
+     * @return HasOne
+     */
+    public function last_answer(): HasOne
+    {
+        return $this->HasOne(UserAnswer::class, 'card_id', 'id');
     }
 }

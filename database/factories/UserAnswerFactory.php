@@ -31,16 +31,16 @@ class UserAnswerFactory extends Factory
         $status = $this->faker->randomElement([0, 1]);
         switch ($status){
             case 0:
-                $question = $this->faker->paragraph;
-                $answer = $this->faker->paragraph;
+                $question = $this->faker->sentence(3);
+                $answer = $this->faker->sentence(3);
                 break;
             case 1:
-                $question = $this->faker->paragraph;
+                $question = $this->faker->sentence(3);
                 $answer = $question;
                 break;
             default:
-                $question = $this->faker->paragraph;
-                $answer = $this->faker->paragraph;
+                $question = $this->faker->sentence(3);
+                $answer = $this->faker->sentence(3);
         }
 
         return [

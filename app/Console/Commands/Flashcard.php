@@ -270,7 +270,18 @@ class Flashcard extends Command
      */
     public function create_card(string $question, string $answer)
     {
-
+        try{
+            $card_id = Card::create([
+                'box_id' => 1,
+                'question' => $question,
+                'answer' => $answer
+            ])?->id;
+            $this->line('<fg=green>New card successfully created.</>');
+            return $card_id;
+        } catch (\Exception $e) {
+            $this->line('<fg=yellow>Error:</>');
+            $this->line('<fg=yellow>'.$e->getMessage().'</>');
+        }
     }
 
     /**

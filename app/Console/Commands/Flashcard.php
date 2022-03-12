@@ -6,6 +6,7 @@ use App\Models\Card;
 use App\Models\User;
 use App\Models\UserAnswer;
 use Illuminate\Console\Command;
+use Illuminate\Database\Eloquent\Model;
 
 class Flashcard extends Command
 {
@@ -97,8 +98,9 @@ class Flashcard extends Command
      */
     public function print_practice_history()
     {
-        $cards = Card::with(['last_answer' => function($query) {
-            $query->where('user_id', 1);
+        $user = User::find(1);
+        $cards = Card::with(['last_answer' => function($query) use ($user){
+            $query->where('user_id', $user->id);
         }])->get()->toArray();
         $total = 0;
         $correct = 0;
@@ -149,8 +151,9 @@ class Flashcard extends Command
      */
     public function print_practice_stats()
     {
-        $cards = Card::with(['last_answer' => function($query) {
-            $query->where('user_id', 1);
+        $user = User::find(1);
+        $cards = Card::with(['last_answer' => function($query) use ($user){
+            $query->where('user_id', $user->id);
         }])->get()->toArray();
         $total = 0;
         $correct = 0;
@@ -291,7 +294,50 @@ class Flashcard extends Command
      */
     public function practice($card_id)
     {
-
+        $user = User::find(1);
+        $card = Card::with('last_answer', 'answers')->where([
+            'id' => $card_id
+        ])->first();
+        $card_array = $card->toArray();
+        $can_practice = false;
+        if(!is_array($card_array['last_answer'])){
+            $can_practice = true;
+        } else {
+            $can_practice = match ($card_array['last_answer']['status']) {
+                0 => true,
+                1 => false,
+            };
+        }
+        if(!$can_practice){
+            $this->line('<fg=red>You can not practice again, please choose another one.</>');
+            $card_id = $this->prompt_card_id();
+            $this->practice($card_id);
+        }
+        if($can_practice){
+            $answer = $this->prompt_card_answer();
+            if($card_array['answer'] == $answer){
+                $status = 1;
+                $this->line('<fg=green>The answer is correct.</>');
+            } else {
+                $status = 0;
+                $this->line('<fg=red>The answer is incorrect.</>');
+            }
+            try{
+                UserAnswer::create([
+                    'card_id' => $card->id,
+                    'user_id' => $user->id,
+                    'answer' => $answer,
+                    'status' => $status
+                ]);
+            } catch (\Exception $e) {
+                $this->line('<fg=yellow>Error:</>');
+                $this->line('<fg=yellow>'.$e->getMessage().'</>');
+            }
+        } else {
+            $this->line('<fg=red>You can not practice again, please choose another one.</>');
+        }
+        $card_id = $this->prompt_card_id();
+        $this->practice($card_id);
     }
 
     /**

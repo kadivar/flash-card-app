@@ -32,22 +32,23 @@ class Flashcard extends Command
     public function handle(): int
     {
         $this->print_help();
-        $picked_operation = $this->choose_operation();
+        $picked_operation = $this->prompt_operation_id();
         switch ($picked_operation) {
             case 1:
-                $new_card_detail = $this->get_new_card_detail();
-                $this->create_card($new_card_detail);
+                $question = $this->prompt_card_question();
+                $answer = $this->prompt_card_answer();
+                $this->create_card($question, $answer);
                 break;
             case 2:
                 $this->list_cards();
                 break;
             case 3:
-                $card_id = 0;
-                $this->show_practice_history();
+                $this->print_practice_history();
+                $card_id = $this->prompt_card_id();
                 $this->practice($card_id);
                 break;
             case 4:
-                $this->show_stats();
+                $this->print_practice_stats();
                 break;
             case 5:
                 $this->reset();
@@ -88,11 +89,104 @@ class Flashcard extends Command
     }
 
     /**
+     * List questions with their practice status
+     *
+     * @return void
+     */
+    public function print_practice_history()
+    {
+        $cards = Card::with(['last_answer' => function($query) {
+            $query->where('user_id', 1);
+        }])->get()->toArray();
+        $total = 0;
+        $correct = 0;
+        $incorrect = 0;
+        $not_answered = 0;
+        $result = [];
+        foreach ($cards as $card){
+            if(!is_array($card['last_answer'])){
+                $card_id = '<fg=yellow>'.$card['id'].'</>';
+                $status = '<fg=yellow>Not answered</>';
+                $not_answered++;
+            } else {
+                switch ($card['last_answer']['status']){
+                    case 0:
+                        $card_id = '<fg=red>'.$card['id'].'</>';
+                        $status = '<fg=red>Incorrect</>';
+                        $incorrect++;
+                        break;
+                    case 1:
+                        $card_id = '<fg=green>'.$card['id'].'</>';
+                        $status = '<fg=green>Correct</>';
+                        $correct++;
+                        break;
+                }
+            }
+            array_push($result, [
+                'ID' => $card_id,
+                'question' => $card['question'],
+                'status' => $status
+            ]);
+            $total++;
+        }
+        array_push($result, [
+            ' ' => ' ',
+            'question' => '<fg=green> % of completion</>',
+            'status' => '<fg=green> ' . round(($correct/$total)*100) . '% </>'
+        ]);
+        $this->table(
+            ['ID', 'Question', 'Status'],
+            $result
+        );
+    }
+
+    /**
+     * Show study statistics
+     *
+     * @return void
+     */
+    public function print_practice_stats()
+    {
+        $cards = Card::with(['last_answer' => function($query) {
+            $query->where('user_id', 1);
+        }])->get()->toArray();
+        $total = 0;
+        $correct = 0;
+        $incorrect = 0;
+        $not_answered = 0;
+        foreach ($cards as $card){
+            if(!is_array($card['last_answer'])){
+                $not_answered++;
+            } else {
+                switch ($card['last_answer']['status']){
+                    case 0:
+                        $incorrect++;
+                        break;
+                    case 1:
+                        $correct++;
+                        break;
+                }
+            }
+            $total++;
+        }
+        $result = [];
+        array_push($result, [
+            'total' => $total,
+            'total_answers' => round((($correct+$incorrect)/$total)*100) . '%',
+            'correct_answers' => round(($correct/$total)*100) . '%'
+        ]);
+        $this->table(
+            ['Total Questions', '% of Answered Questions', '% Of Questions with Correct Answer'],
+            $result
+        );
+    }
+
+    /**
      * Prompt from main menu operation options
      *
      * @return int
      */
-    public function choose_operation(): int
+    public function prompt_operation_id(): int
     {
         $picked_operation = $this->ask('Please choose one of listed options (Just number of Item)');
         if (!is_numeric($picked_operation)) {
@@ -107,38 +201,48 @@ class Flashcard extends Command
     }
 
     /**
-     * Create a new flash card
+     * Prompt for getting card id
      *
-     * @return int|array
+     * @return int
      */
-    public function get_new_card_detail(): int|array
+    public function prompt_card_id(): int
+    {
+        $card_id = $this->ask('Please fill card Id');
+        if (!is_numeric($card_id)) {
+            $this->line('<fg=red>You can just fill a number!</>');
+            $card_id = $this->ask('Please fill card Id');
+        }
+        return (int)$card_id;
+    }
+
+    /**
+     * Get question from prompt
+     *
+     * @return string
+     */
+    public function prompt_card_question(): string
     {
         $question = $this->ask('Enter the question');
         if (!is_string($question)) {
             $this->line('<fg=red>Please fill the input correctly.</>');
             $question = $this->ask('Enter the question');
         }
+        return $question;
+    }
+
+    /**
+     * Get answer from prompt
+     *
+     * @return string
+     */
+    public function prompt_card_answer(): string
+    {
         $answer = $this->ask('Enter the answer');
         if (!is_string($answer)) {
             $this->line('<fg=red>Please fill the input correctly.</>');
             $answer = $this->ask('Enter the answer');
         }
-        return [
-            'question' => $question,
-            'answer' => $answer
-        ];
-    }
-
-    /**
-     * Create a new flash card
-     *
-     * @return void
-     */
-    public function create_card($new_card_detail)
-    {
-        $question = $new_card_detail['question'];
-        $answer = $new_card_detail['answer'];
-
+        return $answer;
     }
 
     /**
@@ -155,50 +259,16 @@ class Flashcard extends Command
     }
 
     /**
-     * List questions with their practice status
+     * Create a new flash card
+     *
+     * @param $question string
+     * @param $answer string
      *
      * @return void
      */
-    public function show_practice_history()
+    public function create_card(string $question, string $answer)
     {
-        $cards = Card::with(['last_answer' => function($query) {
-                $query->where('user_id', 1);
-            }])->get()->toArray();
-        $total = 0;
-        $correct = 0;
-        $incorrect = 0;
-        $not_answered = 0;
-        $result = [];
-        foreach ($cards as $card){
-            if(!is_array($card['last_answer'])){
-                $status = '<fg=yellow>Not answered</>';
-                $not_answered++;
-            } else {
-                switch ($card['last_answer']['status']){
-                    case 0:
-                        $status = '<fg=red>Incorrect</>';
-                        $incorrect++;
-                        break;
-                    case 1:
-                        $status = '<fg=green>Correct</>';
-                        $correct++;
-                        break;
-                }
-            }
-            array_push($result, [
-                'question' => $card['question'],
-                'status' => $status
-            ]);
-            $total++;
-        }
-        array_push($result, [
-            'question' => '<fg=green> % of completion</>',
-            'status' => '<fg=green> ' . round(($correct/$total)*100) . '% </>'
-        ]);
-        $this->table(
-            ['Question', 'Status'],
-            $result
-        );
+
     }
 
     /**
@@ -207,16 +277,6 @@ class Flashcard extends Command
      * @return void
      */
     public function practice($card_id)
-    {
-
-    }
-
-    /**
-     * Get study statistics
-     *
-     * @return void
-     */
-    public function show_stats()
     {
 
     }

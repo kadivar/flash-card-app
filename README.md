@@ -25,18 +25,24 @@ For Initial run and get commands list use: `php artisan flashcard:interactive`
 - `6 . Exit` By choosing this item you exit to get some rest :)
 
 ## How to initial setup
-For quick of running project it's recommended to use `laravel sail`. 
-For this reason you have to navigate to project path in terminal and then run:
+For quick running, it's recommended to use `laravel sail`. 
+For this reason you have to navigate to project path in terminal and then run these command one by one:
 
-`./vendor/bin/sail up -d`
+- `./vendor/bin/sail up -d`
+- `cp .env.example .env` (Just don't forget to fill values.)
+- `./vendor/bin/sail composer install --prefer-dist --optimize-autoloader`
+- `./vendor/bin/sail php artisan config:clear`
+- `./vendor/bin/sail php artisan migrate`
+- `./vendor/bin/sail php artisan db:seed`
 
-Then run you considered command after:
+As you can see for running commands through sail this is base command:
 
 `./vendor/bin/sail php artisan [Your expected command]`
 
-For example, for getting list of flash cards you have to run:
 
-`./vendor/bin/sail php artisan flashcard:list`
+Now that's enough to use following command to start journey:
+
+`./vendor/bin/sail php artisan flashcard:interactive`
 
 If need to stop all running services, it's enough to run:
 
@@ -47,12 +53,10 @@ If need to stop all running services, it's enough to run:
 For this case after primary infrastructure setup you need to run following commands to get application ready to use:
 
 - `cp .env.example .env` (Just don't forget to fill values.)
-
 - `composer install --prefer-dist --optimize-autoloader`
-
 - `php artisan config:clear`
-
 - `php artisan migrate`
+- `php artisan db:seed`
 
 ## To do
 

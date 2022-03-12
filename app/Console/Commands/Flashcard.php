@@ -328,6 +328,11 @@ class Flashcard extends Command
         $card = Card::with('last_answer', 'answers')->where([
             'id' => $card_id
         ])->first();
+        if(!$card){
+            $this->line('<fg=red>Please enter a valid card ID.</>');
+            $card_id = $this->prompt_card_id();
+            $this->practice($card_id);
+        }
         $card_array = $card->toArray();
         $can_practice = false;
         if(!is_array($card_array['last_answer'])){

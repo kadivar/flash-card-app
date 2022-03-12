@@ -33,8 +33,8 @@ class CardFactory extends Factory
                 }
                 return Box::factory()->create()->id;
             },
-            'question' => $this->faker->paragraph,
-            'answer' => $this->faker->paragraph,
+            'question' => $this->faker->sentence(3),
+            'answer' => $this->faker->sentence(3),
             'description' => $this->faker->paragraph
         ];
     }

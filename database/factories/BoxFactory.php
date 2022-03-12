@@ -26,7 +26,7 @@ class BoxFactory extends Factory
     public function definition()
     {
         return [
-            'name' => $this->faker->word,
+            'name' => 'default',
             'description' => $this->faker->paragraph
         ];
     }

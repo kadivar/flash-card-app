@@ -12,13 +12,13 @@
 repetition tool for memorising questions and their respective answers.
 It includes following subcommands:
 
-- Initial run and get help: `php artisan flashcard:interactive`
-- Create a Card: `php artisan flashcard:create`
-- List all cards: `php artisan flashcard:list`
-- Practice cards: `php artisan flashcard:practice`
-- Get statistics of flash cards study: `php artisan flashcard:stats`
-- Reset all personal saved study records: `php artisan flashcard:stats`
-- Exit to normal shell: `php artisan flashcard:exit`
+For Initial run and get commands list use: `php artisan flashcard:interactive`
+- `1 . Create a flashcard` By choosing this item you will be asked for a "Question" and its "Answer" to create a new flash card.
+- `2 . List all flashcards` By choosing this item a list of all cards will be printed.
+- `3 . Practice` By choosing this item you will be able to choose each card you want to practice from printed list.
+- `4 . Stats` By choosing this item you can be aware of your study progress.
+- `5 . Reset` By choosing this item you can reset all your study history and start again from the beginning.
+- `6 . Exit` By choosing this item you exit to get some rest :)
 
 ## How to initial setup
 For quick of running project it's recommended to use `laravel sail`. 

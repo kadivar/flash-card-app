@@ -97,16 +97,16 @@ class Flashcard extends Command
         $this->line('By choosing this item a list of all cards will be printed.');
         $this->line(' ');
         $this->line('<fg=green>3 . Practice</>');
-        $this->line('By choosing this item you will be able choose each card you want to practice from printed list.');
+        $this->line('By choosing this item you will be able to choose each card you want to practice from printed list.');
         $this->line(' ');
         $this->line('<fg=green>4 . Stats</>');
-        $this->line('By choosing this item you can be aware of you study progress.');
+        $this->line('By choosing this item you can be aware of your study progress.');
         $this->line(' ');
         $this->line('<fg=green>5 . Reset</>');
-        $this->line('By choosing this item you can reset all you study history and start again from the beginning.');
+        $this->line('By choosing this item you can reset all your study history and start again from the beginning.');
         $this->line(' ');
         $this->line('<fg=green>6 . Exit</>');
-        $this->line('By choosing this item you exit have som rest :)');
+        $this->line('By choosing this item you exit to get some rest :)');
         $this->line(' ');
     }
 

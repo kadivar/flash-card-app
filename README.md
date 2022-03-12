@@ -12,27 +12,37 @@
 repetition tool for memorising questions and their respective answers.
 It includes following subcommands:
 
-- Initial run and get help: `php artisan flashcard:interactive`
-- Create a Card: `php artisan flashcard:create`
-- List all cards: `php artisan flashcard:list`
-- Practice cards: `php artisan flashcard:practice`
-- Get statistics of flash cards study: `php artisan flashcard:stats`
-- Reset all personal saved study records: `php artisan flashcard:stats`
-- Exit to normal shell: `php artisan flashcard:exit`
+### Data Schema
+![Data Schema](https://github.com/kadivar/flash-card-app/blob/main/data-schema.png?raw=true)
+
+### How to use
+For Initial run and get commands list use: `php artisan flashcard:interactive`
+- `1 . Create a flashcard` By choosing this item you will be asked for a "Question" and its "Answer" to create a new flash card.
+- `2 . List all flashcards` By choosing this item a list of all cards will be printed.
+- `3 . Practice` By choosing this item you will be able to choose each card you want to practice from printed list.
+- `4 . Stats` By choosing this item you can be aware of your study progress.
+- `5 . Reset` By choosing this item you can reset all your study history and start again from the beginning.
+- `6 . Exit` By choosing this item you exit to get some rest :)
 
 ## How to initial setup
-For quick of running project it's recommended to use `laravel sail`. 
-For this reason you have to navigate to project path in terminal and then run:
+For quick running, it's recommended to use `laravel sail`. 
+For this reason you have to navigate to project path in terminal and then run these command one by one:
 
-`./vendor/bin/sail up -d`
+- `./vendor/bin/sail up -d`
+- `cp .env.example .env` (Just don't forget to fill values.)
+- `./vendor/bin/sail composer install --prefer-dist --optimize-autoloader`
+- `./vendor/bin/sail php artisan config:clear`
+- `./vendor/bin/sail php artisan migrate`
+- `./vendor/bin/sail php artisan db:seed`
 
-Then run you considered command after:
+As you can see for running commands through sail this is base command:
 
 `./vendor/bin/sail php artisan [Your expected command]`
 
-For example, for getting list of flash cards you have to run:
 
-`./vendor/bin/sail php artisan flashcard:list`
+Now that's enough to use following command to start journey:
+
+`./vendor/bin/sail php artisan flashcard:interactive`
 
 If need to stop all running services, it's enough to run:
 
@@ -43,12 +53,10 @@ If need to stop all running services, it's enough to run:
 For this case after primary infrastructure setup you need to run following commands to get application ready to use:
 
 - `cp .env.example .env` (Just don't forget to fill values.)
-
 - `composer install --prefer-dist --optimize-autoloader`
-
 - `php artisan config:clear`
-
 - `php artisan migrate`
+- `php artisan db:seed`
 
 ## To do
 

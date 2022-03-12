@@ -347,6 +347,15 @@ class Flashcard extends Command
      */
     public function reset()
     {
-
+        try{
+            $user = User::find(1);
+            UserAnswer::where([
+                'user_id' =>$user->id
+            ])->forceDelete();
+            $this->line('<fg=green>All personal stats reset.</>');
+        } catch (\Exception $e) {
+            $this->line('<fg=yellow>Error:</>');
+            $this->line('<fg=yellow>'.$e->getMessage().'</>');
+        }
     }
 }

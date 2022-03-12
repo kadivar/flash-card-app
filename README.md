@@ -12,6 +12,10 @@
 repetition tool for memorising questions and their respective answers.
 It includes following subcommands:
 
+### Data Schema
+![alt text](https://github.com/kadivar/flash-card-app/blob/main/data-schema.png?raw=true)
+
+### How to use
 For Initial run and get commands list use: `php artisan flashcard:interactive`
 - `1 . Create a flashcard` By choosing this item you will be asked for a "Question" and its "Answer" to create a new flash card.
 - `2 . List all flashcards` By choosing this item a list of all cards will be printed.

@@ -154,12 +154,12 @@ class Flashcard extends Command
             $total++;
         }
         if($total > 0){
-            $progress = ($correct/$total)*100;
+            $progress = round(($correct/$total)*100);
         }
         array_push($result, [
             ' ' => ' ',
             'question' => '<fg=green> % of completion</>',
-            'status' => '<fg=green> ' . round($progress) . '% </>'
+            'status' => '<fg=green> ' . $progress . '% </>'
         ]);
         $this->table(
             ['ID', 'Question', 'Status'],
@@ -182,6 +182,8 @@ class Flashcard extends Command
         $correct = 0;
         $incorrect = 0;
         $not_answered = 0;
+        $total_answers_percent = 0;
+        $correct_answers_percent = 0;
         foreach ($cards as $card){
             if(!is_array($card['last_answer'])){
                 $not_answered++;
@@ -198,10 +200,14 @@ class Flashcard extends Command
             $total++;
         }
         $result = [];
+        if($total > 0){
+            $total_answers_percent = round((($correct+$incorrect)/$total)*100);
+            $correct_answers_percent = round(($correct/$total)*100);
+        }
         array_push($result, [
             'total' => $total,
-            'total_answers' => round((($correct+$incorrect)/$total)*100) . '%',
-            'correct_answers' => round(($correct/$total)*100) . '%'
+            'total_answers' => $total_answers_percent . '%',
+            'correct_answers' => $correct_answers_percent . '%'
         ]);
         $this->table(
             ['Total Questions', '% of Answered Questions', '% Of Questions with Correct Answer'],
@@ -322,6 +328,11 @@ class Flashcard extends Command
         $card = Card::with('last_answer', 'answers')->where([
             'id' => $card_id
         ])->first();
+        if(!$card){
+            $this->line('<fg=red>Please enter a valid card ID.</>');
+            $card_id = $this->prompt_card_id();
+            $this->practice($card_id);
+        }
         $card_array = $card->toArray();
         $can_practice = false;
         if(!is_array($card_array['last_answer'])){
@@ -360,6 +371,7 @@ class Flashcard extends Command
         } else {
             $this->line('<fg=red>You can not practice again, please choose another one.</>');
         }
+        $this->print_practice_history();
         $card_id = $this->prompt_card_id();
         $this->practice($card_id);
     }

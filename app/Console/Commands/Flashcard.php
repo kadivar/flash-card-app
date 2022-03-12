@@ -360,6 +360,7 @@ class Flashcard extends Command
         } else {
             $this->line('<fg=red>You can not practice again, please choose another one.</>');
         }
+        $this->print_practice_history();
         $card_id = $this->prompt_card_id();
         $this->practice($card_id);
     }

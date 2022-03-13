@@ -25,12 +25,17 @@ For Initial run and get commands list use: `php artisan flashcard:interactive`
 - `6 . Exit` By choosing this item you exit to get some rest :)
 
 ## How to initial setup
-For quick running, it's recommended to use `laravel sail`. 
-For this reason you have to navigate to project path in terminal and then run these command one by one:
 
-- `./vendor/bin/sail up -d`
+### Locally
+For quick running, it's recommended to use `laravel sail`. 
+For this reason first you have to be sure that you have `docker` ,`docker-compose` and `php >= 8` installed and `composer` binary is accessible on your environment. 
+Just make sure that your php have `common` , `dom` and `curl` extensions.
+
+Then you have to navigate to project path in terminal and then run these commands one by one:
+
+- `composer install --prefer-dist --optimize-autoloader`
 - `cp .env.example .env` (Just don't forget to fill values.)
-- `./vendor/bin/sail composer install --prefer-dist --optimize-autoloader`
+- `./vendor/bin/sail up -d`
 - `./vendor/bin/sail php artisan config:clear`
 - `./vendor/bin/sail php artisan migrate`
 - `./vendor/bin/sail php artisan db:seed`

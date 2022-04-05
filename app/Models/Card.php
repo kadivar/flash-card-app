@@ -81,6 +81,8 @@ class Card extends Model
      */
     public function last_answer(): HasOne
     {
-        return $this->HasOne(UserAnswer::class, 'card_id', 'id')->latest();
+        return $this->HasOne(UserAnswer::class, 'card_id', 'id')->withDefault(function ($answer) {
+            $answer->status = -1;
+        })->latest();
     }
 }

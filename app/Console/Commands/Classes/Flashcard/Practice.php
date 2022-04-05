@@ -52,7 +52,7 @@ class Practice
             $can_init = true;
         } else {
             $can_init = match ($card_array['last_answer']['status']) {
-                0 => true,
+                -1, 0 => true,
                 1 => false,
             };
         }
@@ -84,7 +84,7 @@ class Practice
         } else {
             $this->flashcard->line('<fg=red>You can not practice again, please choose another one.</>');
         }
-        $history->get_history();
+        $history->get();
         $card_id = $prompt->get_input(new PromptCardId());
         self::init($card_id);
     }

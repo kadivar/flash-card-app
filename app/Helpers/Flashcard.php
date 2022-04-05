@@ -26,4 +26,28 @@ class Flashcard
         }
         return true;
     }
+
+    /**
+     * Get answer counts
+     *
+     * @param $cards
+     * @return array
+     */
+    public static function get_answer_counts($cards): array
+    {
+        $cards = array_map(function ($index, $card) {
+            $status = match ($card['last_answer']['status']) {
+                -1 => 'not_answered',
+                0 => 'incorrect',
+                1 => 'correct',
+            };
+            $card['status'] = $status;
+            return $card;
+        }, array_keys($cards), $cards);
+        $counts = array_count_values(array_column($cards, 'status'));
+        $counts['correct'] = $counts['correct'] ?? 0;
+        $counts['incorrect'] = $counts['incorrect'] ?? 0;
+        $counts['not_answered'] = $counts['not_answered'] ?? 0;
+        return $counts;
+    }
 }

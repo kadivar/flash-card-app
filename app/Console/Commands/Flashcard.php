@@ -63,7 +63,7 @@ class Flashcard extends Command
                 $card->list();
                 break;
             case 3:
-                $history->get_history();
+                $history->get();
                 $card_id = $prompt->get_input(new PromptCardId());
                 $practice->init($card_id);
                 break;

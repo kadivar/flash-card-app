@@ -7,6 +7,7 @@ namespace App\Console\Commands\Classes\Flashcard;
 use App\Console\Commands\Flashcard;
 use App\Models\Card;
 use App\Models\User;
+use App\Helpers\Flashcard as Helper;
 
 class History
 {
@@ -32,47 +33,28 @@ class History
      *
      * @return void
      */
-    public function get_history()
+    public function get()
     {
         $user = User::get()->first();
         $cards = Card::with(['last_answer' => function ($query) use ($user) {
             $query->where('user_id', $user->id);
         }])->get()->toArray();
-        $total = 0;
-        $correct = 0;
-        $incorrect = 0;
-        $not_answered = 0;
-        $progress = 0;
-        $result = [];
-        foreach ($cards as $card) {
-            if (!is_array($card['last_answer'])) {
-                $card_id = '<fg=yellow>' . $card['id'] . '</>';
-                $status = '<fg=yellow>Not answered</>';
-                $not_answered++;
-            } else {
-                switch ($card['last_answer']['status']) {
-                    case 0:
-                        $card_id = '<fg=red>' . $card['id'] . '</>';
-                        $status = '<fg=red>Incorrect</>';
-                        $incorrect++;
-                        break;
-                    case 1:
-                        $card_id = '<fg=green>' . $card['id'] . '</>';
-                        $status = '<fg=green>Correct</>';
-                        $correct++;
-                        break;
-                }
-            }
-            array_push($result, [
-                'ID' => $card_id,
-                'question' => $card['question'],
-                'status' => $status
-            ]);
-            $total++;
-        }
-        if ($total > 0) {
-            $progress = round(($correct / $total) * 100);
-        }
+        $result = array_map(function ($index, $card) {
+            $item = [];
+            $status = match ($card['last_answer']['status']) {
+                -1 => '<fg=yellow>Not answered</>',
+                0 => '<fg=red>Incorrect</>',
+                1 => '<fg=green>Correct</>',
+            };
+            $item['id'] = $card['id'];
+            $item['question'] = $card['question'];
+            $item['status'] = $status;
+            return $item;
+        }, array_keys($cards), $cards);
+        $counts = Helper::get_answer_counts($cards);
+        $total = count($cards);
+        $correct = $counts['correct'];
+        $progress = $total > 0 ? (round(($correct / $total) * 100)) : 0;
         array_push($result, [
             ' ' => ' ',
             'question' => '<fg=green> % of completion</>',

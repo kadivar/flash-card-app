@@ -5,6 +5,7 @@ namespace App\Console\Commands\Classes\Flashcard;
 
 
 use App\Console\Commands\Flashcard;
+use App\Helpers\Flashcard as Helper;
 use App\Models\Card;
 use App\Models\User;
 
@@ -38,32 +39,13 @@ class Stat
         $cards = Card::with(['last_answer' => function ($query) use ($user) {
             $query->where('user_id', $user->id);
         }])->get()->toArray();
-        $total = 0;
-        $correct = 0;
-        $incorrect = 0;
-        $not_answered = 0;
-        $total_answers_percent = 0;
-        $correct_answers_percent = 0;
-        foreach ($cards as $card) {
-            if (!is_array($card['last_answer'])) {
-                $not_answered++;
-            } else {
-                switch ($card['last_answer']['status']) {
-                    case 0:
-                        $incorrect++;
-                        break;
-                    case 1:
-                        $correct++;
-                        break;
-                }
-            }
-            $total++;
-        }
+        $counts = Helper::get_answer_counts($cards);
+        $total = count($cards);
+        $correct = $counts['correct'];
+        $incorrect = $counts['incorrect'];
+        $total_answers_percent = $total > 0 ? (round((($correct + $incorrect) / $total) * 100)) : 0;
+        $correct_answers_percent = $total > 0 ? (round(($correct / $total) * 100)) : 0;
         $result = [];
-        if ($total > 0) {
-            $total_answers_percent = round((($correct + $incorrect) / $total) * 100);
-            $correct_answers_percent = round(($correct / $total) * 100);
-        }
         array_push($result, [
             'total' => $total,
             'total_answers' => $total_answers_percent . '%',

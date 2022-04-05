@@ -60,18 +60,33 @@ class Flashcard extends Command
                 $card->create($question, $answer);
                 break;
             case 2:
-                $card->list();
+                $cards = $card->list();
+                $this->table(
+                    ['ID', 'Question', 'Answer'],
+                    $cards,
+                );
                 break;
             case 3:
-                $history->get();
+                $history = $history->get();
+                $this->table(
+                    ['ID', 'Question', 'Status'],
+                    $history
+                );
                 $card_id = $prompt->get_input(new PromptCardId());
                 $practice->init($card_id);
                 break;
             case 4:
-                $stat->get();
+                $result = $stat->get();
+                $this->table(
+                    ['Total Questions', '% of Answered Questions', '% Of Questions with Correct Answer'],
+                    $result
+                );
                 break;
             case 5:
-                $reet->init();
+                $result = $reet->init();
+                if ($result) {
+                    $this->line('<fg=green>All personal stats reset.</>');
+                }
                 break;
             case 6:
                 $this->line('<bg=blue;fg=white>Good luck!</>');

@@ -84,7 +84,11 @@ class Practice
         } else {
             $this->flashcard->line('<fg=red>You can not practice again, please choose another one.</>');
         }
-        $history->get();
+        $result = $history->get();
+        $this->flashcard->table(
+            ['ID', 'Question', 'Status'],
+            $result
+        );
         $card_id = $prompt->get_input(new PromptCardId());
         self::init($card_id);
     }

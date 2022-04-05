@@ -30,19 +30,20 @@ class Reset
     /**
      * Reset personal study data
      *
-     * @return void
+     * @return false
      */
-    public function init()
+    public function init(): bool
     {
         try {
             $user = User::get()->first();
             UserAnswer::where([
                 'user_id' => $user->id
             ])->forceDelete();
-            $this->flashcard->line('<fg=green>All personal stats reset.</>');
+            return true;
         } catch (\Exception $e) {
             $this->flashcard->line('<fg=yellow>Error:</>');
             $this->flashcard->line('<fg=yellow>' . $e->getMessage() . '</>');
+            return false;
         }
     }
 }

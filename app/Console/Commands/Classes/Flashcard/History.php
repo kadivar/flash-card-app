@@ -31,9 +31,9 @@ class History
     /**
      * List questions with their practice status
      *
-     * @return void
+     * @return array
      */
-    public function get()
+    public function get(): array
     {
         $user = User::get()->first();
         $cards = Card::with(['last_answer' => function ($query) use ($user) {
@@ -60,9 +60,6 @@ class History
             'question' => '<fg=green> % of completion</>',
             'status' => '<fg=green> ' . $progress . '% </>'
         ]);
-        $this->flashcard->table(
-            ['ID', 'Question', 'Status'],
-            $result
-        );
+        return $result;
     }
 }

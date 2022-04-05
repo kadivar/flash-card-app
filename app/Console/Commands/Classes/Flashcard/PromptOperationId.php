@@ -21,7 +21,7 @@ class PromptOperationId implements FlashcardPromptInterface
             $prompt->line('<fg=red>You can just fill a number!</>');
             $picked_operation = $prompt->ask('Please choose one of listed options (Just Item number)');
         }
-        if ($picked_operation < 0 || $picked_operation > 6) {
+        if ($picked_operation < 1 || $picked_operation > 6) {
             $prompt->line('<fg=red>Please just fill a number between 1 to 6.</>');
             $picked_operation = $prompt->ask('Please choose one of listed options (Just Item number)');
         }

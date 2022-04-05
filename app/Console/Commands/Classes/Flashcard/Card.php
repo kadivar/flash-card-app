@@ -30,14 +30,11 @@ class Card
     /**
      * List all flash cards
      *
-     * @return void
+     * @return array
      */
-    public function list()
+    public function list(): array
     {
-        $this->flashcard->table(
-            ['ID', 'Question', 'Answer'],
-            CardModel::all(['id', 'question', 'answer'])->toArray(),
-        );
+        return CardModel::all(['id', 'question', 'answer'])->toArray();
     }
 
     /**

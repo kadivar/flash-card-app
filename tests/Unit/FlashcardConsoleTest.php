@@ -2,19 +2,9 @@
 
 namespace Tests\Unit;
 
-use App\Models\Card;
-use App\Models\User;
-use Database\Seeders\DatabaseSeeder;
 use Database\Seeders\TestUserAnswerSeeder;
-use Illuminate\Support\Facades\DB;
 use Tests\CreatesApplication;
 use Tests\TestCase;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\DatabaseMigrations;
-use Database\Seeders\AdminUserSeeder;
-use Database\Seeders\BoxSeeder;
-use Database\Seeders\CardSeeder;
-use Database\Seeders\UserAnswerSeeder;
 
 use App\Console\Commands;
 
@@ -30,96 +20,134 @@ class FlashcardConsoleTest extends TestCase
     protected string $seeder = TestUserAnswerSeeder::class;
 
     /**
-     * Test Create card command
+     * Run a specific seeder before each test.
+     *
+     * @var mixed
+     */
+    protected mixed $flashcard;
+
+    /**
+     * init
      *
      * @return void
      */
-    public function test_create_card_command()
+    public function setUp(): void
     {
-        $this->artisan('flashcard:interactive')
-            ->expectsQuestion('Please choose one of listed options (Just number of Item)', 1)
-            ->expectsQuestion('Enter the question', 'This is a unit test generation question?')
-            ->expectsQuestion('Enter the answer', 'This is a unit test generation answer.')
-            ->expectsOutput('New card successfully created.')
-            ->assertExitCode(0);
+        parent::setUp();
+        $this->flashcard = $this->mock(Commands\Flashcard::class);
     }
 
     /**
-     * Test List cards command
+     * init
      *
      * @return void
      */
-    public function test_list_cards_command()
+    public function tearDown(): void
+    {
+
+    }
+
+    /**
+     * Test
+     *
+     * @return void
+     */
+    public function testGetStatClass(): void
+    {
+        $stat = new Commands\Classes\Flashcard\Stat($this->flashcard);
+        $result = $stat->get();
+        $this->assertIsArray($result);
+        $this->assertCount(1, $result);
+        $this->assertArrayHasKey('total', $result[0]);
+        $this->assertArrayHasKey('total_answers', $result[0]);
+        $this->assertArrayHasKey('correct_answers', $result[0]);
+        $this->assertIsNumeric($result[0]['total']);
+        $this->assertIsString($result[0]['total_answers']);
+        $this->assertIsString($result[0]['correct_answers']);
+    }
+
+    /**
+     * Test
+     *
+     * @return void
+     */
+    public function testGetHistoryClass(): void
+    {
+        $history = new Commands\Classes\Flashcard\History($this->flashcard);
+        $result = $history->get();
+        $last_item_index = count($result) - 1;
+        $this->assertIsArray($result);
+        $this->assertGreaterThan(0, count($result));
+        $this->assertArrayHasKey('id', $result[0]);
+        $this->assertArrayHasKey('question', $result[0]);
+        $this->assertArrayHasKey('status', $result[0]);
+        $this->assertIsNumeric($result[0]['id']);
+        $this->assertIsString($result[0]['question']);
+        $this->assertIsString($result[0]['status']);
+        $this->assertArrayHasKey(' ', $result[$last_item_index]);
+        $this->assertArrayHasKey('question', $result[$last_item_index]);
+        $this->assertArrayHasKey('status', $result[$last_item_index]);
+        $this->assertSame($result[$last_item_index][' '], ' ');
+        $this->assertSame($result[$last_item_index]['question'], '<fg=green> % of completion</>');
+        $this->assertIsString($result[$last_item_index][' ']);
+        $this->assertIsString($result[$last_item_index]['status']);
+    }
+
+    /**
+     * Test
+     *
+     * @return void
+     */
+    public function testListCardClass(): void
+    {
+        $card = new Commands\Classes\Flashcard\Card($this->flashcard);
+        $result = $card->list();
+        $this->assertIsArray($result);
+        $this->assertGreaterThan(0, count($result));
+        $this->assertArrayHasKey('id', $result[0]);
+        $this->assertArrayHasKey('question', $result[0]);
+        $this->assertArrayHasKey('answer', $result[0]);
+        $this->assertIsNumeric($result[0]['id']);
+        $this->assertIsString($result[0]['question']);
+        $this->assertIsString($result[0]['answer']);
+    }
+
+    /**
+     * Test
+     *
+     * @return void
+     */
+    public function testCreateCardClass(): void
     {
         $this->assertTrue(true);
     }
 
     /**
-     * Test Practice command
+     * Test
      *
      * @return void
      */
-    public function test_success_new_practice_command()
+    public function testInitPracticeClass(): void
     {
         $this->assertTrue(true);
     }
 
     /**
-     * Test Practice command
+     * Test
      *
      * @return void
      */
-    public function test_failed_new_practice_command()
+    public function testPromptClass(): void
     {
         $this->assertTrue(true);
     }
 
     /**
-     * Test Practice command
+     * Test
      *
      * @return void
      */
-    public function test_success_old_practice_command()
-    {
-        $this->assertTrue(true);
-    }
-
-    /**
-     * Test Practice command
-     *
-     * @return void
-     */
-    public function test_failed_old_practice_command()
-    {
-        $this->assertTrue(true);
-    }
-
-    /**
-     * Test Stats command
-     *
-     * @return void
-     */
-    public function test_stats_command()
-    {
-        $this->assertTrue(true);
-    }
-
-    /**
-     * Test Reset command
-     *
-     * @return void
-     */
-    public function test_reset_command()
-    {
-        $this->assertTrue(true);
-    }
-
-    /**
-     * Test Exit command
-     *
-     * @return void
-     */
-    public function test_exit_command()
+    public function testResetClass(): void
     {
         $this->assertTrue(true);
     }

@@ -31,9 +31,9 @@ class Stat
     /**
      * Show study statistics
      *
-     * @return void
+     * @return array
      */
-    public function get()
+    public function get(): array
     {
         $user = User::get()->first();
         $cards = Card::with(['last_answer' => function ($query) use ($user) {
@@ -51,9 +51,6 @@ class Stat
             'total_answers' => $total_answers_percent . '%',
             'correct_answers' => $correct_answers_percent . '%'
         ]);
-        $this->flashcard->table(
-            ['Total Questions', '% of Answered Questions', '% Of Questions with Correct Answer'],
-            $result
-        );
+        return $result;
     }
 }

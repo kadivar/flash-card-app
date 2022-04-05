@@ -2,21 +2,9 @@
 
 namespace Tests\Feature;
 
-use App\Models\Card;
-use App\Models\User;
-use Database\Seeders\DatabaseSeeder;
 use Database\Seeders\TestUserAnswerSeeder;
-use Illuminate\Support\Facades\DB;
 use Tests\CreatesApplication;
 use Tests\TestCase;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\DatabaseMigrations;
-use Database\Seeders\AdminUserSeeder;
-use Database\Seeders\BoxSeeder;
-use Database\Seeders\CardSeeder;
-use Database\Seeders\UserAnswerSeeder;
-
-use App\Console\Commands;
 
 class FlashcardConsoleTest extends TestCase
 {
@@ -34,7 +22,7 @@ class FlashcardConsoleTest extends TestCase
      *
      * @return void
      */
-    public function test_create_card_command()
+    public function testCreateCardCommand()
     {
         $this->artisan('flashcard:interactive')
             ->expectsQuestion('Please choose one of listed options (Just number of Item)', 1)
@@ -49,7 +37,7 @@ class FlashcardConsoleTest extends TestCase
      *
      * @return void
      */
-    public function test_list_cards_command()
+    public function testListCardsCommand()
     {
         $this->assertTrue(true);
     }
@@ -59,7 +47,7 @@ class FlashcardConsoleTest extends TestCase
      *
      * @return void
      */
-    public function test_success_new_practice_command()
+    public function testSuccessNewPracticeCommand()
     {
         $this->assertTrue(true);
     }
@@ -69,7 +57,7 @@ class FlashcardConsoleTest extends TestCase
      *
      * @return void
      */
-    public function test_failed_new_practice_command()
+    public function testFailedNewPracticeCommand()
     {
         $this->assertTrue(true);
     }
@@ -79,7 +67,7 @@ class FlashcardConsoleTest extends TestCase
      *
      * @return void
      */
-    public function test_success_old_practice_command()
+    public function testSuccessOldPracticeCommand()
     {
         $this->assertTrue(true);
     }
@@ -89,7 +77,7 @@ class FlashcardConsoleTest extends TestCase
      *
      * @return void
      */
-    public function test_failed_old_practice_command()
+    public function testFailedOldPracticeCommand()
     {
         $this->assertTrue(true);
     }
@@ -99,7 +87,7 @@ class FlashcardConsoleTest extends TestCase
      *
      * @return void
      */
-    public function test_stats_command()
+    public function testStatsCommand()
     {
         $this->assertTrue(true);
     }
@@ -109,7 +97,7 @@ class FlashcardConsoleTest extends TestCase
      *
      * @return void
      */
-    public function test_reset_command()
+    public function testResetCommand()
     {
         $this->assertTrue(true);
     }
@@ -119,7 +107,7 @@ class FlashcardConsoleTest extends TestCase
      *
      * @return void
      */
-    public function test_exit_command()
+    public function testExitCommand()
     {
         $this->assertTrue(true);
     }

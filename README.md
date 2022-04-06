@@ -37,6 +37,7 @@ Then you have to navigate to project path in terminal and then run these command
 - `cp .env.example .env` (Just don't forget to fill values.)
 - `./vendor/bin/sail up -d`
 - `./vendor/bin/sail php artisan config:clear`
+- `./vendor/bin/sail php artisan key:generate`
 - `./vendor/bin/sail php artisan migrate`
 - `./vendor/bin/sail php artisan db:seed`
 
@@ -60,6 +61,7 @@ For this case after primary infrastructure setup you need to run following comma
 - `cp .env.example .env` (Just don't forget to fill values.)
 - `composer install --prefer-dist --optimize-autoloader`
 - `php artisan config:clear`
+- `php artisan key:generate`
 - `php artisan migrate`
 - `php artisan db:seed`
 

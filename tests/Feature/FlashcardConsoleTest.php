@@ -2,20 +2,12 @@
 
 namespace Tests\Feature;
 
-use Database\Seeders\TestUserAnswerSeeder;
-use Tests\CreatesApplication;
 use Tests\TestCase;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class FlashcardConsoleTest extends TestCase
 {
-    use CreatesApplication;
-
-    /**
-     * Run a specific seeder before each test.
-     *
-     * @var string
-     */
-    protected string $seeder = TestUserAnswerSeeder::class;
+    use RefreshDatabase;
 
     /**
      * Test Create card command

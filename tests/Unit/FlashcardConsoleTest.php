@@ -2,22 +2,14 @@
 
 namespace Tests\Unit;
 
-use Database\Seeders\TestUserAnswerSeeder;
-use Tests\CreatesApplication;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
 use App\Console\Commands;
 
 class FlashcardConsoleTest extends TestCase
 {
-    use CreatesApplication;
-
-    /**
-     * Run a specific seeder before each test.
-     *
-     * @var string
-     */
-    protected string $seeder = TestUserAnswerSeeder::class;
+    use RefreshDatabase;
 
     /**
      * Run a specific seeder before each test.
